@@ -1,0 +1,25 @@
+{
+  "name": "sdk-soundcloud",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index"
+  },
+  "keywords": [],
+  "author": "Spencer Brown <me@spencer.sx>",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.4",
+    "eslint": "^4.19.1",
+    "eslint-config-mixmax": "^1.0.0",
+    "express": "^4.16.3",
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2",
+    "underscore": "^1.9.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.3"
+  }
+}
