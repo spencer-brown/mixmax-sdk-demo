@@ -1,55 +1,48 @@
 const express = require('express');
-const _ = require('underscore');
-const { getTracks } = require('./utils/soundcloud');
+const soundcloud = require('./utils/soundcloud');
 
 
 const router = express.Router();
 
+router.get('/', async (req, res) => {
+  const query = 'hucci';
+  const tracks = await soundcloud.searchTracks(query);
+
+  res.send(tracks);
+});
+
 router.get('/typeahead', async (req, res) => {
-  const { text: query } = req.query;
+  const text = req.query.text;
 
-  // Filter small queries.
-  if (query.length < 3) {
-    return res.json([{
-      title: '<em>Keep typing...</em>',
-      text: ''
-    }]);
-  }
+  const tracks = await soundcloud.searchTracks(text);
 
-  const tracks = await getTracks(query);
+  // TODO: Handle case where no tracks are found.
 
-  // Let the user know if there are no results.
-  if (_.isEmpty(tracks)) {
-    return res.json([{
-      title: '<em>(no results)</em>',
-      text: ''
-    }]);
-  }
-
-  const results = tracks.map((track) => {
+  const tracksFormatted = tracks.map((track) => {
     return {
-      title: `${track.title} (${track.likes_count} likes)`,
-
-      // Sent to /resolve.
+      title: track.title,
       text: JSON.stringify({
-        name: track.title,
-        url: track.permalink_url
+        url: track.permalink_url,
+        trackTitle: track.title
       })
     };
   });
 
-  res.json(results);
+  res.send(tracksFormatted);
 });
 
 router.get('/resolver', (req, res) => {
-  const { text: trackData } = req.query;
-  const { name, url } = JSON.parse(trackData);
+  const text = req.query.text;
+  const textParsed = JSON.parse(text);
+
+  const url = textParsed.url;
+  const trackTitle = textParsed.trackTitle;
 
   res.send({
     body: `
-      Check out <a href="${url}">${name}</a> on SoundCloud!
+      Check out my new fav song: <a href="${url}">${trackTitle}</a>.
     `,
-    subject: name
+    subject: 'My new fav song'
   });
 });
 

@@ -2,7 +2,6 @@
 
 const express = require('express');
 const cors = require('cors');
-const routes = require('./api');
 
 
 const app = express();
@@ -15,7 +14,7 @@ const corsOptions = {
   origin: /^[^.\s]+\.mixmax\.com$/,
   credentials: true
 };
-app.use('/api', cors(corsOptions), routes);
+app.use('/api', cors(corsOptions), require('./api'));
 
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);

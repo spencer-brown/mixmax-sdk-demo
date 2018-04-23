@@ -5,6 +5,10 @@ const request = require('request-promise');
 const CLIENT_ID = '90802818691006a750c78dbcf1fa9793';
 
 /**
+ * GETs a URL like:
+ *  
+ *  https://api.soundcloud.com/foo?client_id=XYZ&bar=baz
+ *
  * @param {String} path - The API path to request.
  * @param {Object} query - Query string parameters.
  *
@@ -23,17 +27,12 @@ function makeApiCall(path, query) {
   });
 }
 
-/**
- * @param {String} query - A SoundCloud search query.
- *
- * @returns {Promise}
- */
-async function getTracks(query) {
-  return makeApiCall('tracks',
-    { q: query }
-  );
+function searchTracks(query) {
+  return makeApiCall('tracks', {
+    q: query
+  });
 }
 
 module.exports = {
-  getTracks
+  searchTracks
 };
